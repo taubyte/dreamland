@@ -18,15 +18,15 @@ func attachNames(c *cli.Command, flag cli.Flag) {
 		c.ArgsUsage = "[name,...]" + c.ArgsUsage
 	}
 
-	action := c.Action
-
+	originalAction := c.Action
 	c.Action = func(ctx *cli.Context) error {
 		names, err := getName(ctx)
 		if err != nil {
 			return err
 		}
 		ctx.Set("names", names)
-		return action(ctx)
+		// execute the original action at the end
+		return originalAction(ctx)
 	}
 
 }
